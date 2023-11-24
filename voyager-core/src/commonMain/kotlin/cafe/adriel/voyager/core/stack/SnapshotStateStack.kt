@@ -47,7 +47,7 @@ private fun <Item : Any> stackSaver(
         restore = { items -> SnapshotStateStack(items, minSize) }
     )
 
-public class SnapshotStateStack<Item>(
+public open class SnapshotStateStack<Item>(
     items: List<Item>,
     minSize: Int = 0
 ) : Stack<Item> {
@@ -65,11 +65,10 @@ public class SnapshotStateStack<Item>(
         require(items.size >= minSize) { "Stack size ${items.size} is less than the min size $minSize" }
     }
 
-    @PublishedApi
-    internal val stateStack: SnapshotStateList<Item> = items.toMutableStateList()
+    protected val stateStack: SnapshotStateList<Item> = items.toMutableStateList()
 
     public override var lastEvent: StackEvent by mutableStateOf(StackEvent.Idle, neverEqualPolicy())
-        private set
+        protected set
 
     public override val items: List<Item> by derivedStateOf {
         stateStack.toList()

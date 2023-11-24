@@ -102,13 +102,14 @@ public fun Navigator(
     }
 }
 
-public class Navigator @InternalVoyagerApi constructor(
+public open class Navigator constructor(
     screens: List<Screen>,
-    @InternalVoyagerApi public val key: String,
+    public val key: String,
     private val stateHolder: SaveableStateHolder,
     public val disposeBehavior: NavigatorDisposeBehavior,
-    public val parent: Navigator? = null
-) : Stack<Screen> by screens.toMutableStateStack(minSize = 1) {
+    public val parent: Navigator? = null,
+    protected val stack: Stack<Screen> = screens.toMutableStateStack(minSize = 1)
+) : Stack<Screen> by stack {
 
     public val level: Int =
         parent?.level?.inc() ?: 0
@@ -130,7 +131,7 @@ public class Navigator @InternalVoyagerApi constructor(
     }
 
     @Composable
-    public fun saveableState(
+    public open fun saveableState(
         key: String,
         screen: Screen = lastItem,
         content: @Composable () -> Unit
@@ -160,7 +161,7 @@ public class Navigator @InternalVoyagerApi constructor(
         )
     }
 
-    public fun popUntilRoot() {
+    public open fun popUntilRoot() {
         popUntilRoot(this)
     }
 
@@ -173,7 +174,7 @@ public class Navigator @InternalVoyagerApi constructor(
     }
 
     @InternalVoyagerApi
-    public fun dispose(
+    public open fun dispose(
         screen: Screen
     ) {
         ScreenLifecycleStore.remove(screen)
