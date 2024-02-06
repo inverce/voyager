@@ -102,19 +102,19 @@ public fun Navigator(
     }
 }
 
-public open class Navigator constructor(
+public open class Navigator(
     screens: List<Screen>,
     public val key: String,
-    private val stateHolder: SaveableStateHolder,
+    public val stateHolder: SaveableStateHolder,
     public val disposeBehavior: NavigatorDisposeBehavior,
     public val parent: Navigator? = null,
     protected val stack: Stack<Screen> = screens.toMutableStateStack(minSize = 1)
 ) : Stack<Screen> by stack {
 
-    public val level: Int =
+    public open val level: Int =
         parent?.level?.inc() ?: 0
 
-    public val lastItem: Screen by derivedStateOf {
+    public open val lastItem: Screen by derivedStateOf {
         lastItemOrNull ?: error("Navigator has no screen")
     }
 
@@ -126,17 +126,21 @@ public open class Navigator constructor(
         message = "Use 'lastItem' instead. Will be removed in 1.0.0.",
         replaceWith = ReplaceWith("lastItem")
     )
-    public val last: Screen by derivedStateOf {
+    public open val last: Screen by derivedStateOf {
         lastItem
     }
 
     @Composable
     public open fun saveableState(
         key: String,
-        screen: Screen = lastItem,
+        screen: Screen? = null,
         content: @Composable () -> Unit
     ) {
-        val stateKey = "${screen.key}:$key"
+        val useScreen = remember(screen, lastItem) {
+            screen ?: lastItem
+        }
+
+        val stateKey = "${useScreen.key}:$key"
         stateKeys += stateKey
 
         @Composable
@@ -146,8 +150,8 @@ public open class Navigator constructor(
             stateHolder.SaveableStateProvider(providedStateKey, content)
         }
 
-        val lifecycleOwner = rememberScreenLifecycleOwner(screen)
-        val navigatorScreenLifecycleOwners = getNavigatorScreenLifecycleProvider(screen)
+        val lifecycleOwner = rememberScreenLifecycleOwner(useScreen)
+        val navigatorScreenLifecycleOwners = getNavigatorScreenLifecycleProvider(useScreen)
 
         val composed = remember(lifecycleOwner, navigatorScreenLifecycleOwners) {
             listOf(lifecycleOwner) + navigatorScreenLifecycleOwners
