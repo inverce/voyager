@@ -1,7 +1,7 @@
 plugins {
+    id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.android.application")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
 }
@@ -22,11 +22,11 @@ kapt {
 }
 
 dependencies {
+    implementation(projects.voyagerScreenmodel)
     implementation(projects.voyagerNavigator)
     implementation(projects.voyagerTabNavigator)
     implementation(projects.voyagerBottomSheetNavigator)
     implementation(projects.voyagerTransitions)
-    implementation(projects.voyagerAndroidx)
     implementation(projects.voyagerHilt)
     implementation(projects.voyagerKodein)
     implementation(projects.voyagerKoin)

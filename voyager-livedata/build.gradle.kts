@@ -1,6 +1,6 @@
 plugins {
-    kotlin("android")
     id("com.android.library")
+    kotlin("android")
     id("com.vanniktech.maven.publish")
 }
 
@@ -15,6 +15,7 @@ android {
 
 dependencies {
     api(projects.voyagerCore)
+    api(projects.voyagerScreenmodel)
 
     implementation(libs.compose.runtimeLiveData)
 

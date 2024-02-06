@@ -2,10 +2,8 @@ package cafe.adriel.voyager.core.lifecycle
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 
-@ExperimentalVoyagerApi
 @InternalVoyagerApi
 @Composable
 public fun MultipleProvideBeforeScreenContent(

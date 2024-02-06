@@ -78,10 +78,6 @@ public open class SnapshotStateStack<Item>(
         stateStack.lastOrNull()
     }
 
-    public override val lastOrNull: Item? by derivedStateOf {
-        lastItemOrNull
-    }
-
     public override val size: Int by derivedStateOf {
         stateStack.size
     }

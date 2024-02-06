@@ -122,14 +122,6 @@ public open class Navigator(
 
     internal val children = ThreadSafeMap<NavigatorKey, Navigator>()
 
-    @Deprecated(
-        message = "Use 'lastItem' instead. Will be removed in 1.0.0.",
-        replaceWith = ReplaceWith("lastItem")
-    )
-    public open val last: Screen by derivedStateOf {
-        lastItem
-    }
-
     @Composable
     public open fun saveableState(
         key: String,

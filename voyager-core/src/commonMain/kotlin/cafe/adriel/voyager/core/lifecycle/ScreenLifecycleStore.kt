@@ -11,29 +11,37 @@ public object ScreenLifecycleStore {
     private val owners = ThreadSafeMap<ScreenKey, ScreenLifecycleOwner>()
     private val newOwners = ThreadSafeMap<ScreenKey, ThreadSafeMap<KType, ScreenDisposable>>()
 
-    @Deprecated(
-        message = "Use `register` instead. Will be removed in 1.0.0.",
-        replaceWith = ReplaceWith("ScreenLifecycleStore.register<T>(screen, factory)")
-    )
-    public fun get(
+    /**
+     * Get current for screen or register a ScreenDisposable resulted by
+     * [factory] that will be called `onDispose` on the [screen] leaves
+     * the Navigation stack.
+     */
+    public inline fun <reified T : ScreenDisposable> get(
         screen: Screen,
-        factory: (ScreenKey) -> ScreenLifecycleOwner
-    ): ScreenLifecycleOwner =
-        owners.getOrPut(screen.key) { factory(screen.key) }
+        noinline factory: (ScreenKey) -> T
+    ): T {
+        return get(screen, typeOf<T>(), factory) as T
+    }
 
     /**
-     * Register a ScreenDisposable that will be called `onDispose` on the
-     * [screen] leaves the Navigation stack.
+     * Get current for screen or register a ScreenDisposable resulted by
+     * [factory] that will be called `onDispose` on the [screen] leaves
+     * the Navigation stack.
      */
+    @Deprecated(
+        message = "Use `get` instead. Will be removed in 1.1.0.",
+        replaceWith = ReplaceWith("ScreenLifecycleStore.get<T>(screen, factory)"),
+        level = DeprecationLevel.HIDDEN
+    )
     public inline fun <reified T : ScreenDisposable> register(
         screen: Screen,
         noinline factory: (ScreenKey) -> T
     ): T {
-        return register(screen, typeOf<T>(), factory) as T
+        return get(screen, factory)
     }
 
     @PublishedApi
-    internal fun <T : ScreenDisposable> register(
+    internal fun <T : ScreenDisposable> get(
         screen: Screen,
         screenDisposeListenerType: KType,
         factory: (ScreenKey) -> T

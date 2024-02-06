@@ -2,13 +2,12 @@ package cafe.adriel.voyager.hilt
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.internal.componentActivity
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.screenModel.rememberNavigatorScreenModel
 import dagger.hilt.android.EntryPointAccessors
 
 /**
@@ -66,7 +65,6 @@ public inline fun <reified T : ScreenModel, reified F : ScreenModelFactory> Scre
  *
  * @return A new instance of [ScreenModel] or the same instance remembered by the composition
  */
-@ExperimentalVoyagerApi
 @Composable
 public inline fun <reified T : ScreenModel> Navigator.getNavigatorScreenModel(
     tag: String? = null
@@ -79,8 +77,8 @@ public inline fun <reified T : ScreenModel> Navigator.getNavigatorScreenModel(
         val model = screenModels[T::class.java]?.get()
             ?: error(
                 "${T::class.java} not found in hilt graph.\nPlease, check if you have a Multibinding " +
-                        "declaration to your ScreenModel using @IntoMap and " +
-                        "@ScreenModelKey(${T::class.qualifiedName}::class)"
+                    "declaration to your ScreenModel using @IntoMap and " +
+                    "@ScreenModelKey(${T::class.qualifiedName}::class)"
             )
         model as T
     }
@@ -93,7 +91,6 @@ public inline fun <reified T : ScreenModel> Navigator.getNavigatorScreenModel(
  * @param factory A function that receives a [ScreenModelFactory] and returns a [ScreenModel] created by the custom factory
  * @return A new instance of [ScreenModel] or the same instance remembered by the composition
  */
-@ExperimentalVoyagerApi
 @Composable
 public inline fun <reified T : ScreenModel, reified F : ScreenModelFactory> Navigator.getNavigatorScreenModel(
     tag: String? = null,
@@ -107,8 +104,8 @@ public inline fun <reified T : ScreenModel, reified F : ScreenModelFactory> Navi
         val screenFactory = screenFactories[F::class.java]?.get()
             ?: error(
                 "${F::class.java} not found in hilt graph.\nPlease, check if you have a Multibinding " +
-                        "declaration to your ScreenModelFactory using @IntoMap and " +
-                        "@ScreenModelFactoryKey(${F::class.qualifiedName}::class)"
+                    "declaration to your ScreenModelFactory using @IntoMap and " +
+                    "@ScreenModelFactoryKey(${F::class.qualifiedName}::class)"
             )
         factory.invoke(screenFactory as F)
     }

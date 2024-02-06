@@ -1,7 +1,7 @@
 plugins {
+    id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.android.library")
     id("com.vanniktech.maven.publish")
 }
 
@@ -19,7 +19,7 @@ kapt {
 }
 
 dependencies {
-    api(projects.voyagerAndroidx)
+    api(projects.voyagerScreenmodel)
     api(projects.voyagerNavigator)
 
     implementation(libs.compose.runtime)

@@ -1,6 +1,6 @@
 plugins {
-    kotlin("android")
     id("com.android.library")
+    kotlin("android")
 }
 
 setupModuleForAndroidxCompose(
@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.voyagerScreenmodel)
     implementation(projects.voyagerNavigator)
 
     implementation(projects.samples.multiModule.navigation)
